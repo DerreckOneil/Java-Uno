@@ -21,6 +21,7 @@ public class Uno {
     private static GameMove RulebookGameMove = new GameMove();
     private static Scanner kbd = new Scanner(System.in);
     private static boolean AIPlacedACard;
+    private static boolean wildCardPlaced;
     private static boolean uno;
     private static boolean win;
 
@@ -83,7 +84,9 @@ public class Uno {
         PrintPlayerCards(1);
         CheckLastCardPlayed();
         AIPlacedACard = false;
-        System.out.println("P1 Choose an option:\nOption 1: Play card. \nOption 2: Pick Up a new card. ");
+        wildCardPlaced = false;
+        System.out.println("P1 Choose an option:\nOption 1: Play card. \nOption 2: Pick Up a new card. "
+                + "\nOption 3: Print the 2nd Player's Cards");
         int option = kbd.nextInt();
         switch (option) {
             case 1:
@@ -94,19 +97,21 @@ public class Uno {
                 //PlayCard(PlayerOneCards.get(cardOption));
 
                 DetermineValidityAndPlay(CardsPlayed.peek(), PlayerOneCards.get(cardOption), 1);
-
-                if (RulebookGameMove.PlayingStackRule()) {
+                if (RulebookGameMove.PlayingStackRule() && !wildCardPlaced) {
                     //Determine if the player has another card to which they can play.
                     System.out.println("Determining if you have another card that can be played.");
                     for (int i = 0; i < PlayerOneCards.size(); i++) {
                         DetermineValidityAndAsk(CardsPlayed.peek(), PlayerOneCards.get(i), 1);
                     }
                 }
-
                 break;
             case 2:
                 System.out.println("Picking up a new card");
                 PlayerOneCards.add(DrawCard());
+                break;
+            case 3: 
+                PrintPlayerCards(2);
+                MainGameLoop();
                 break;
             default: 
                 System.out.println("Invalid choice");
@@ -114,14 +119,24 @@ public class Uno {
                 break;
         }
         System.out.println("Now it's Player 2's turn.");
+        wildCardPlaced = false;
         PrintPlayerCards(2);
         DetermineIfAICanPlayACard(); //Only plays first card available
+        /*
         if (RulebookGameMove.PlayingStackRule()) {
-            System.out.println("Determining if the AI has another card that can be played.");
+            System.out.println("Determining if the AI has another card that can be played.Should this even be ran?");
+            
             for (int i = 0; i < PlayerTwoCards.size(); i++) {
                 DetermineValidityAndAsk(CardsPlayed.peek(), PlayerTwoCards.get(i), 2);
             }
         }
+        */
+        if(!AIPlacedACard)
+        {
+            System.out.println("Giving the AI a card!-----------------");
+            PlayerTwoCards.add(DrawCard());
+        }
+        
         if (PlayerOneCards.size() == 1) {
             System.out.println("Player 1 has UNO");
         }
@@ -136,7 +151,6 @@ public class Uno {
             System.out.println("Player 2 won");
             System.exit(0);
         }
-
         MainGameLoop();
     }
 
@@ -150,6 +164,7 @@ public class Uno {
     private static void DetermineValidityAndPlay(Card playedCard, Card currentCard, int player) {
         boolean isValidMove = RulebookGameMove.IsValid(playedCard, currentCard);
         boolean isValidCard = RulebookGameMove.IsValidCard(currentCard);
+        /*
         if (isValidMove && isValidCard) {
             if (player == 2) {
                 AIPlacedACard = true;
@@ -161,12 +176,9 @@ public class Uno {
             System.out.println("Invalid move");
             return;
         }
-    }
-
-    private static void DetermineValidityAndAsk(Card playedCard, Card currentCard, int player) {
-        boolean isValidMove = RulebookGameMove.IsValid(playedCard, currentCard);
-        boolean isValidCard = RulebookGameMove.IsValidCard(currentCard);
-        if (isValidMove && isValidCard && playedCard.getCardValue() < 5) {
+        */
+        if (isValidMove && isValidCard && !wildCardPlaced) {
+            System.out.println(wildCardPlaced);
             if (player == 1) {
                 System.out.println("Would you like to play this card? 1:Y 2:N");
                 PrintCardStats(currentCard);
@@ -189,7 +201,39 @@ public class Uno {
                 AIPlacedACard = true;
             }
             //PlayCard(currentCard);
-            System.out.println("Good move you smart bitch");
+            System.out.println("Good move ");
+        } else {
+            System.out.println("Onto next card to check.");
+        }
+    }
+
+    private static void DetermineValidityAndAsk(Card playedCard, Card currentCard, int player) {
+        boolean isValidMove = RulebookGameMove.IsValid(playedCard, currentCard);
+        boolean isValidCard = RulebookGameMove.IsValidCard(currentCard);
+        if (isValidMove && isValidCard) {
+            if (player == 1) {
+                System.out.println("Would you like to play this card? 1:Y 2:N");
+                PrintCardStats(currentCard);
+                System.out.println("Onto this card?");
+                PrintCardStats(playedCard);
+                int option = kbd.nextInt();
+                switch (option) {
+                    case 1:
+                        PlayCard(currentCard, player);
+                        break;
+                    case 2:
+                        return;
+                }
+            } else {
+                System.out.println("Playing");
+                PrintCardStats(currentCard);
+                System.out.println("Onto this card");
+                PrintCardStats(playedCard);
+                PlayCard(currentCard, player);
+                AIPlacedACard = true;
+            }
+            //PlayCard(currentCard);
+            System.out.println("Good move ");
         } else {
             System.out.println("Onto next card to check.");
         }
@@ -249,6 +293,11 @@ public class Uno {
             PrintCardStats(card);
         } else {
             PlayerTwoCards.remove(card);
+        }
+        if(card.getCardValue() >= 13)
+        {
+            System.out.println("Wildcard has been placed!");
+            wildCardPlaced = true;
         }
     }
 
