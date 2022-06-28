@@ -16,6 +16,7 @@ public class GameMove
     private boolean isValidCard;
     private boolean sameColor;
     private boolean sameNumber;
+    private boolean sameCard;
     private boolean playingStackRule;
     
     public GameMove()
@@ -48,7 +49,27 @@ public class GameMove
         
         return isValid;
     }
-    
+    public boolean IsValidStacked(Card playedCard,Card currentCard)
+    {
+        
+        if(SameCard(playedCard, currentCard))
+        {
+            System.out.println("Same Card");
+            isValid = true;
+        }
+        else if(SameColor(playedCard, currentCard)|| SameNumber(playedCard, currentCard))
+        {
+            System.out.println("It has the same color or number");
+            isValid = true;
+        }
+        else
+        {
+            System.out.println("nope");
+            isValid = false;
+        }
+        
+        return isValid;
+    }
     public boolean SameColor(Card playedCard, Card card)
     {
         if(playedCard.getType() == card.getType() || playedCard.getCardValue() == card.getCardValue())
@@ -56,6 +77,15 @@ public class GameMove
         else
             sameColor = false;
         return sameColor;
+    }
+    
+    public boolean SameCard(Card playedCard, Card card)
+    {
+        
+        sameCard = playedCard.equals(card);
+        
+        
+        return sameCard;
     }
     public boolean IsWildCard(Card card)
     {

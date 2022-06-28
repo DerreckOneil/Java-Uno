@@ -22,6 +22,7 @@ public class Uno {
     private static Scanner kbd = new Scanner(System.in);
     private static boolean AIPlacedACard;
     private static boolean wildCardPlaced;
+    private static boolean colorWildCardPlaced;
     private static boolean uno;
     private static boolean win;
 
@@ -31,7 +32,9 @@ public class Uno {
 
         PlayGame();
         //TODO the colorvalue will no longer be attached to the card. It must be separated...
-
+        //Stacked rule: Player will only be able to stack with same color. One wildcard per play.
+        //-Same color and same number (basically same card) will be stack-able
+        //TODO: If the player places down a draw two, he has to be able to check 
     }
 
     private static void PlayGame() {
@@ -101,7 +104,7 @@ public class Uno {
                     //Determine if the player has another card to which they can play.
                     System.out.println("Determining if you have another card that can be played.");
                     for (int i = 0; i < PlayerOneCards.size(); i++) {
-                        DetermineValidityAndAsk(CardsPlayed.peek(), PlayerOneCards.get(i), 1);
+                        DetermineValidityAndPlayStacked(CardsPlayed.peek(), PlayerOneCards.get(i), 1);
                     }
                 }
                 break;
@@ -155,10 +158,23 @@ public class Uno {
     }
 
     private static void DetermineIfAICanPlayACard() {
-
-        for (int i = 0; i < PlayerTwoCards.size(); i++) {
-            DetermineValidityAndPlay(CardsPlayed.peek(), PlayerTwoCards.get(i), 2);
+        //DetermineValidityAndPlay(CardsPlayed.peek(), PlayerTwoCards.get(i), 2);
+        for (int i = 0; i < PlayerTwoCards.size(); i++) 
+        {
+            if(!AIPlacedACard)
+            {
+                DetermineValidityAndPlay(CardsPlayed.peek(), PlayerTwoCards.get(i), 2);
+            }
+            else
+                break;
+            
         }
+        System.out.println("time to search for other cards for P2");
+        for (int i = 0; i < PlayerTwoCards.size(); i++) 
+        {
+            DetermineValidityAndPlayStacked(CardsPlayed.peek(), PlayerTwoCards.get(i), 2);
+        }
+        
     }
 
     private static void DetermineValidityAndPlay(Card playedCard, Card currentCard, int player) {
@@ -207,10 +223,10 @@ public class Uno {
         }
     }
 
-    private static void DetermineValidityAndAsk(Card playedCard, Card currentCard, int player) {
-        boolean isValidMove = RulebookGameMove.IsValid(playedCard, currentCard);
+    private static void DetermineValidityAndPlayStacked(Card playedCard, Card currentCard, int player) {
+        boolean isValidMove = RulebookGameMove.IsValidStacked(playedCard, currentCard);
         boolean isValidCard = RulebookGameMove.IsValidCard(currentCard);
-        if (isValidMove && isValidCard) {
+        if (isValidMove && isValidCard && !wildCardPlaced ) {
             if (player == 1) {
                 System.out.println("Would you like to play this card? 1:Y 2:N");
                 PrintCardStats(currentCard);
@@ -294,7 +310,7 @@ public class Uno {
         } else {
             PlayerTwoCards.remove(card);
         }
-        if(card.getCardValue() >= 13)
+        if(card.getCardValue() >= 13) //count the drawTwo as wildcards
         {
             System.out.println("Wildcard has been placed!");
             wildCardPlaced = true;

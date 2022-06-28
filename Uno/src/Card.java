@@ -43,6 +43,37 @@ public class Card
     public void setCardValue(int value)
     {
         this.cardValue = value;
+        
+    }
+    
+    @Override
+    public String toString()
+    {
+        String str = "";
+        
+        str = "Card: " + this.type.name() + " colorValue: " + this.colorValue + " cardValue: " + this.cardValue;
+        return str;
+    }
+    public boolean equals(Object obj)
+    {
+        boolean tf = false;
+        
+        if(obj instanceof Card)
+        {
+           Card CardObj = (Card)obj;
+           System.out.println("Comparing!");
+           System.out.println(this.toString());
+           System.out.println(CardObj.toString());
+       
+           if(this.cardValue == CardObj.cardValue && this.colorValue == CardObj.colorValue)
+           {
+               tf = true;
+           }
+        }
+        else
+            tf = false;
+              
+        return tf;
     }
     public boolean isValidCard(Card card)
     {
