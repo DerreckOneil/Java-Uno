@@ -57,7 +57,7 @@ public class GameMove
             System.out.println("Same Card");
             isValid = true;
         }
-        else if(SameColor(playedCard, currentCard)|| SameNumber(playedCard, currentCard))
+        else if(SameNumber(playedCard, currentCard))
         {
             System.out.println("It has the same color or number");
             isValid = true;

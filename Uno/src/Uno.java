@@ -35,6 +35,9 @@ public class Uno {
         //Stacked rule: Player will only be able to stack with same color. One wildcard per play.
         //-Same color and same number (basically same card) will be stack-able
         //TODO: If the player places down a draw two, he has to be able to check 
+        //TODO: Make sure the reverse and draw 2s do not have color values.
+        //TODO: Re-organize the script to allow color on color's draw 2s. 
+        
     }
 
     private static void PlayGame() {
@@ -125,15 +128,7 @@ public class Uno {
         wildCardPlaced = false;
         PrintPlayerCards(2);
         DetermineIfAICanPlayACard(); //Only plays first card available
-        /*
-        if (RulebookGameMove.PlayingStackRule()) {
-            System.out.println("Determining if the AI has another card that can be played.Should this even be ran?");
-            
-            for (int i = 0; i < PlayerTwoCards.size(); i++) {
-                DetermineValidityAndAsk(CardsPlayed.peek(), PlayerTwoCards.get(i), 2);
-            }
-        }
-        */
+        
         if(!AIPlacedACard)
         {
             System.out.println("Giving the AI a card!-----------------");
@@ -169,12 +164,14 @@ public class Uno {
                 break;
             
         }
-        System.out.println("time to search for other cards for P2");
-        for (int i = 0; i < PlayerTwoCards.size(); i++) 
+        if(RulebookGameMove.PlayingStackRule() && !wildCardPlaced)
         {
-            DetermineValidityAndPlayStacked(CardsPlayed.peek(), PlayerTwoCards.get(i), 2);
+            System.out.println("time to search for other cards for P2");
+            for (int i = 0; i < PlayerTwoCards.size(); i++) 
+            {
+                DetermineValidityAndPlayStacked(CardsPlayed.peek(), PlayerTwoCards.get(i), 2);
+            }
         }
-        
     }
 
     private static void DetermineValidityAndPlay(Card playedCard, Card currentCard, int player) {
@@ -226,7 +223,8 @@ public class Uno {
     private static void DetermineValidityAndPlayStacked(Card playedCard, Card currentCard, int player) {
         boolean isValidMove = RulebookGameMove.IsValidStacked(playedCard, currentCard);
         boolean isValidCard = RulebookGameMove.IsValidCard(currentCard);
-        if (isValidMove && isValidCard && !wildCardPlaced ) {
+        if (isValidMove && isValidCard && !wildCardPlaced) 
+        {
             if (player == 1) {
                 System.out.println("Would you like to play this card? 1:Y 2:N");
                 PrintCardStats(currentCard);
@@ -250,7 +248,9 @@ public class Uno {
             }
             //PlayCard(currentCard);
             System.out.println("Good move ");
-        } else {
+        } 
+        else 
+        {
             System.out.println("Onto next card to check.");
         }
     }
@@ -315,6 +315,11 @@ public class Uno {
             System.out.println("Wildcard has been placed!");
             wildCardPlaced = true;
         }
+        else if (card.getCardValue() >= 5 && card.getCardValue() < 13)
+        {
+            System.out.println("Color wild card placed. ");
+            colorWildCardPlaced = true;
+        }
     }
 
     private static Card DrawCard() {
@@ -334,14 +339,9 @@ public class Uno {
                 + "\n It's faceValue is:" + randomCard.getType());
          */
 
-        if (randomCard.getCardValue() < 5) {
-            //System.out.println("CardValue: " + randomCard.getCardValue());
-            randomCard = AttachColorValue(randomCard);
-        } else if (randomCard.getCardValue() == 13) {
-            randomCard.setColorValue(11);
-        } else if (randomCard.getCardValue() == 14) {
-            randomCard.setColorValue(12);
-        }
+        
+        randomCard = AttachColorValue(randomCard);
+        
 
         /*          System.out.println("randomCard:"
                 + "\nFace: " + randomCard.name()
@@ -382,10 +382,28 @@ public class Uno {
     }
 
     private static Card AttachColorValue(Card randomCard) {
-        Random rand = new Random();
-        int randInt = rand.nextInt(10);
-        //System.out.println("Attaching Color Value of: " + randInt);
-        randomCard.setColorValue(randInt);
+        if(randomCard.getCardValue() >= 5 && randomCard.getCardValue() <= 8)
+        {
+            System.out.println("Not applicable for a colorValue setting to 11");
+            randomCard.setColorValue(11);
+        }
+        else if(randomCard.getCardValue() >= 9 && randomCard.getCardValue() <= 12)
+        {
+            System.out.println("Not applicable for a colorValue setting to 12");
+            randomCard.setColorValue(12);
+        }
+        else if(randomCard.getCardValue() >= 13)
+        {
+            System.out.println("Not applicable for a colorValue setting to 13");
+            randomCard.setColorValue(13);
+        }
+        else
+        {
+            Random rand = new Random();
+            int randInt = rand.nextInt(10);
+            //System.out.println("Attaching Color Value of: " + randInt);
+            randomCard.setColorValue(randInt);
+        }
         return randomCard;
     }
 
@@ -415,42 +433,42 @@ public class Uno {
             case 5:
                 randomCardType = CardType.REDDRAW2;
                 randomCard.setType(randomCardType);
-                randomCard.setCardValue(1);
+                randomCard.setCardValue(5);
                 return randomCard;
             case 6:
                 randomCardType = CardType.BLUEDRAW2;
                 randomCard.setType(randomCardType);
-                randomCard.setCardValue(2);
+                randomCard.setCardValue(6);
                 return randomCard;
             case 7:
                 randomCardType = CardType.YELLOWDRAW2;
                 randomCard.setType(randomCardType);
-                randomCard.setCardValue(3);
+                randomCard.setCardValue(7);
                 return randomCard;
             case 8:
                 randomCardType = CardType.GREENDRAW2;
                 randomCard.setType(randomCardType);
-                randomCard.setCardValue(4);
+                randomCard.setCardValue(8);
                 return randomCard;
             case 9:
                 randomCardType = CardType.REDREVERSE;
                 randomCard.setType(randomCardType);
-                randomCard.setCardValue(1);
+                randomCard.setCardValue(9);
                 return randomCard;
             case 10:
                 randomCardType = CardType.BLUEREVERSE;
                 randomCard.setType(randomCardType);
-                randomCard.setCardValue(2);
+                randomCard.setCardValue(10);
                 return randomCard;
             case 11:
                 randomCardType = CardType.YELLOWREVERSE;
                 randomCard.setType(randomCardType);
-                randomCard.setCardValue(3);
+                randomCard.setCardValue(11);
                 return randomCard;
             case 12:
                 randomCardType = CardType.GREENREVERSE;
                 randomCard.setType(randomCardType);
-                randomCard.setCardValue(4);
+                randomCard.setCardValue(12);
                 return randomCard;
             case 13:
                 randomCardType = CardType.DRAWFOUR;

@@ -61,10 +61,13 @@ public class Card
         if(obj instanceof Card)
         {
            Card CardObj = (Card)obj;
+           
+           /*
            System.out.println("Comparing!");
            System.out.println(this.toString());
            System.out.println(CardObj.toString());
-       
+           */
+           
            if(this.cardValue == CardObj.cardValue && this.colorValue == CardObj.colorValue)
            {
                tf = true;
