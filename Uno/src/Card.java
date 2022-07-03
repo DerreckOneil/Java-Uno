@@ -10,6 +10,7 @@
 public class Card 
 {
     private CardType type;
+    private CardEnum enumeration;
     private int cardValue;
     private int colorValue;
     
@@ -19,6 +20,14 @@ public class Card
 
     public void setType(CardType type) {
         this.type = type;
+    }
+
+    public CardEnum getEnumeration() {
+        return enumeration;
+    }
+
+    public void setEnumeration(CardEnum enumeration) {
+        this.enumeration = enumeration;
     }
     
 
@@ -78,17 +87,5 @@ public class Card
               
         return tf;
     }
-    public boolean isValidCard(Card card)
-    {
-        boolean isVallidCard;
-        if(card.type == CardType.NULL)
-        {
-            System.out.println("CardValue: " + card.getCardValue() + "CardType: " + card.getType() + "CardColorValue: " + card.colorValue);
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
+    
 }

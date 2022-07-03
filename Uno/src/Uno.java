@@ -45,17 +45,19 @@ public class Uno {
         System.out.println("Player one cards size: " + PlayerOneCards.size());
         for (int i = 0; i < 7; i++) {
             PlayerOneCards.add(DrawCard());
-            System.out.println("P1 Card added at index: " + i + "\nName: "
-                    + PlayerOneCards.get(i).getType().name() + "\nColorValue: "
-                    + PlayerOneCards.get(i).getColorValue() + "\nCardValue: "
-                    + PlayerOneCards.get(i).getCardValue());
+            System.out.println("P1 Card added at index: " + i + 
+                    "\nName: " + PlayerOneCards.get(i).getEnumeration() +
+                    "\nCardType: " + PlayerOneCards.get(i).getType() + 
+                    "\nColorValue: " + PlayerOneCards.get(i).getColorValue() + 
+                    "\nCardValue: " + PlayerOneCards.get(i).getCardValue());
         }
         for (int i = 0; i < 7; i++) {
             PlayerTwoCards.add(DrawCard());
-            System.out.println("P2 Card added at index: " + i + "\nName: "
-                    + PlayerTwoCards.get(i).getType().name() + "\nColorValue: "
-                    + PlayerTwoCards.get(i).getColorValue() + "\nCardValue: "
-                    + PlayerTwoCards.get(i).getCardValue());
+            System.out.println("P2 Card added at index: " + i + 
+                    "\nName: " + PlayerTwoCards.get(i).getEnumeration() + 
+                    "\nCardType: " + PlayerTwoCards.get(i).getType() + 
+                    "\nColorValue: " + PlayerTwoCards.get(i).getColorValue() + 
+                    "\nCardValue: " + PlayerTwoCards.get(i).getCardValue());
         }
         FirstIterationPlay();
        
@@ -84,6 +86,7 @@ public class Uno {
                 FirstIterationPlay();
                 break;
         }
+        
     }
     
     private static void MainGameLoop() {
@@ -176,7 +179,6 @@ public class Uno {
 
     private static void DetermineValidityAndPlay(Card playedCard, Card currentCard, int player) {
         boolean isValidMove = RulebookGameMove.IsValid(playedCard, currentCard);
-        boolean isValidCard = RulebookGameMove.IsValidCard(currentCard);
         /*
         if (isValidMove && isValidCard) {
             if (player == 2) {
@@ -190,7 +192,7 @@ public class Uno {
             return;
         }
         */
-        if (isValidMove && isValidCard && !wildCardPlaced) {
+        if (isValidMove && !wildCardPlaced) {
             System.out.println(wildCardPlaced);
             if (player == 1) {
                 System.out.println("Would you like to play this card? 1:Y 2:N");
@@ -222,8 +224,7 @@ public class Uno {
 
     private static void DetermineValidityAndPlayStacked(Card playedCard, Card currentCard, int player) {
         boolean isValidMove = RulebookGameMove.IsValidStacked(playedCard, currentCard);
-        boolean isValidCard = RulebookGameMove.IsValidCard(currentCard);
-        if (isValidMove && isValidCard && !wildCardPlaced) 
+        if (isValidMove  && !wildCardPlaced) 
         {
             if (player == 1) {
                 System.out.println("Would you like to play this card? 1:Y 2:N");
@@ -285,7 +286,7 @@ public class Uno {
     }
 
     private static void PrintCardStats(Card card) {
-        System.out.println("Card Name: " + card.getType().name() + "\nColorValue: " + card.getColorValue() + "\nCardValue: " + card.getCardValue());
+        System.out.println("Card Name: " + card.getEnumeration() + "\nCardType: " + card.getType() + "\nColorValue: " + card.getColorValue() + "\nCardValue: " + card.getCardValue());
 
     }
 
@@ -332,21 +333,12 @@ public class Uno {
             //return;
         }
 
-        randomCard = AttachEnum(randInt, randomCard, randomCard.getType());
-        /*
-        System.out.println("Random Card has been activated"
-                + "\n It's cardValue is:" + randomCard.getCardValue() 
-                + "\n It's faceValue is:" + randomCard.getType());
-         */
-
+        randomCard = AttachEnum(randInt, randomCard, randomCard.getType(), randomCard.getEnumeration());
         
         randomCard = AttachColorValue(randomCard);
         
 
-        /*          System.out.println("randomCard:"
-                + "\nFace: " + randomCard.name()
-                + "\nColorValue: " + randomCard.getColorValue());
-         */
+       
         return randomCard;
     }
 
@@ -384,18 +376,18 @@ public class Uno {
     private static Card AttachColorValue(Card randomCard) {
         if(randomCard.getCardValue() >= 5 && randomCard.getCardValue() <= 8)
         {
-            System.out.println("Not applicable for a colorValue setting to 11");
-            randomCard.setColorValue(11);
+            System.out.println("Not applicable for a colorValue setting to Sentinel Val");
+            randomCard.setColorValue(-1);
         }
         else if(randomCard.getCardValue() >= 9 && randomCard.getCardValue() <= 12)
         {
-            System.out.println("Not applicable for a colorValue setting to 12");
-            randomCard.setColorValue(12);
+            System.out.println("Not applicable for a colorValue setting to Sentinel Val");
+            randomCard.setColorValue(-1);
         }
         else if(randomCard.getCardValue() >= 13)
         {
-            System.out.println("Not applicable for a colorValue setting to 13");
-            randomCard.setColorValue(13);
+            System.out.println("Not applicable for a colorValue setting to Sentinel Val");
+            randomCard.setColorValue(-1);
         }
         else
         {
@@ -407,77 +399,105 @@ public class Uno {
         return randomCard;
     }
 
-    private static Card AttachEnum(int cardIndex, Card randomCard, CardType randomCardType) {
+    private static Card AttachEnum(int cardIndex, Card randomCard, CardType randomCardType, CardEnum randomCardEnum) {
 
         switch (cardIndex) {
             case 1:
-                randomCardType = CardType.RED;
+                randomCardType = CardType.NORMAL;
+                randomCardEnum = CardEnum.RED;
                 randomCard.setType(randomCardType);
+                randomCard.setEnumeration(randomCardEnum);
                 randomCard.setCardValue(1);
                 return randomCard;
             case 2:
-                randomCardType = CardType.BLUE;
+                randomCardType = CardType.NORMAL;
+                randomCardEnum = CardEnum.BLUE;
                 randomCard.setType(randomCardType);
+                randomCard.setEnumeration(randomCardEnum);
                 randomCard.setCardValue(2);
                 return randomCard;
             case 3:
-                randomCardType = CardType.YELLOW;
+                randomCardType = CardType.NORMAL;
+                randomCardEnum = CardEnum.YELLOW;
                 randomCard.setType(randomCardType);
+                randomCard.setEnumeration(randomCardEnum);
                 randomCard.setCardValue(3);
                 return randomCard;
             case 4:
-                randomCardType = CardType.GREEN;
+                randomCardType = CardType.NORMAL;
+                randomCardEnum = CardEnum.GREEN;
                 randomCard.setType(randomCardType);
+                randomCard.setEnumeration(randomCardEnum);
                 randomCard.setCardValue(4);
                 return randomCard;
             case 5:
-                randomCardType = CardType.REDDRAW2;
+                randomCardType = CardType.DRAWTWO;
+                randomCardEnum = CardEnum.RED;
                 randomCard.setType(randomCardType);
+                randomCard.setEnumeration(randomCardEnum);
                 randomCard.setCardValue(5);
                 return randomCard;
             case 6:
-                randomCardType = CardType.BLUEDRAW2;
+                randomCardType = CardType.DRAWTWO;
+                randomCardEnum = CardEnum.BLUE;
                 randomCard.setType(randomCardType);
+                randomCard.setEnumeration(randomCardEnum);
                 randomCard.setCardValue(6);
                 return randomCard;
             case 7:
-                randomCardType = CardType.YELLOWDRAW2;
+                randomCardType = CardType.DRAWTWO;
+                randomCardEnum = CardEnum.YELLOW;
                 randomCard.setType(randomCardType);
+                randomCard.setEnumeration(randomCardEnum);
                 randomCard.setCardValue(7);
                 return randomCard;
             case 8:
-                randomCardType = CardType.GREENDRAW2;
+                randomCardType = CardType.DRAWTWO;
+                randomCardEnum = CardEnum.GREEN;
                 randomCard.setType(randomCardType);
+                randomCard.setEnumeration(randomCardEnum);
                 randomCard.setCardValue(8);
                 return randomCard;
             case 9:
-                randomCardType = CardType.REDREVERSE;
+                randomCardType = CardType.REVERSE;
+                randomCardEnum = CardEnum.RED;
                 randomCard.setType(randomCardType);
+                randomCard.setEnumeration(randomCardEnum);
                 randomCard.setCardValue(9);
                 return randomCard;
             case 10:
-                randomCardType = CardType.BLUEREVERSE;
+                randomCardType = CardType.REVERSE;
+                randomCardEnum = CardEnum.BLUE;
                 randomCard.setType(randomCardType);
+                randomCard.setEnumeration(randomCardEnum);
                 randomCard.setCardValue(10);
                 return randomCard;
             case 11:
-                randomCardType = CardType.YELLOWREVERSE;
+                randomCardType = CardType.REVERSE;
+                randomCardEnum = CardEnum.YELLOW;
                 randomCard.setType(randomCardType);
+                randomCard.setEnumeration(randomCardEnum);
                 randomCard.setCardValue(11);
                 return randomCard;
             case 12:
-                randomCardType = CardType.GREENREVERSE;
+                randomCardType = CardType.REVERSE;
+                randomCardEnum = CardEnum.GREEN;
                 randomCard.setType(randomCardType);
+                randomCard.setEnumeration(randomCardEnum);
                 randomCard.setCardValue(12);
                 return randomCard;
             case 13:
-                randomCardType = CardType.DRAWFOUR;
+                randomCardType = CardType.WILDCARD;
+                randomCardEnum = CardEnum.DRAWFOUR;
                 randomCard.setType(randomCardType);
+                randomCard.setEnumeration(randomCardEnum);
                 randomCard.setCardValue(13);
                 return randomCard;
             case 14:
-                randomCardType = CardType.CHANGECOLOR;
+                randomCardType = CardType.WILDCARD;
+                randomCardEnum = CardEnum.CHANGECOLOR;
                 randomCard.setType(randomCardType);
+                randomCard.setEnumeration(randomCardEnum);
                 randomCard.setCardValue(14);
                 return randomCard;
             default:

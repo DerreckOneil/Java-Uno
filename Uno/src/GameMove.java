@@ -19,10 +19,6 @@ public class GameMove
     private boolean sameCard;
     private boolean playingStackRule;
     
-    public GameMove()
-    {
-        
-    }
     public boolean IsValid(Card playedCard,Card currentCard)
     {
         
@@ -72,7 +68,7 @@ public class GameMove
     }
     public boolean SameColor(Card playedCard, Card card)
     {
-        if(playedCard.getType() == card.getType() || playedCard.getCardValue() == card.getCardValue())
+        if(playedCard.getEnumeration() == card.getEnumeration())
             sameColor = true;
         else
             sameColor = false;
@@ -81,48 +77,32 @@ public class GameMove
     
     public boolean SameCard(Card playedCard, Card card)
     {
-        
-        sameCard = playedCard.equals(card);
-        
+        //Does this work? yeah not taking the chance. 
+        //sameCard = playedCard.equals(card);
+        if(playedCard.getColorValue() == card.getColorValue() && playedCard.getEnumeration() == card.getEnumeration() && playedCard.getType() == card.getType())
+            sameCard = true;
+        else
+            sameCard = false;
         
         return sameCard;
     }
     public boolean IsWildCard(Card card)
     {
-        if(card.getType() == CardType.DRAWFOUR || card.getType() == CardType.CHANGECOLOR)
+        if(card.getType() == CardType.WILDCARD)
             return true;
         else
             return false;
     }
     public boolean SameNumber(Card playedCard, Card card)
     {
-        if(playedCard.getColorValue() == card.getColorValue() && playedCard.getCardValue() < 5)
+        if(playedCard.getColorValue() == card.getColorValue())
+        {
             sameNumber = true;
+        }
         else
             sameNumber = false;
-        return sameNumber;
-    }
-    
-     //throws Exception
-    public boolean IsValidCard(Card currentCard)
-    {
         
-        try 
-        {
-            if(currentCard.isValidCard(currentCard))
-            {
-                return true;
-            }
-            else
-            {
-                throw new Exception("Invalid card value");
-            }
-        } catch (Exception e) 
-        {
-            System.out.println(e.getMessage());
-            System.exit(0);
-        }
-        return isValidCard;
+        return sameNumber;
     }
     
     public void IsPlayingStackRule(boolean tf)

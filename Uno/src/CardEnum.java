@@ -7,12 +7,16 @@
  *
  * @author oneil
  */
-public enum CardType{
-    NORMAL,
-    DRAWTWO,
-    REVERSE,
-    WILDCARD
+public enum CardEnum {
+    RED,
+    BLUE,
+    YELLOW,
+    GREEN,
+    DRAWFOUR,
+    CHANGECOLOR,
+    
     ;
     
-    
+   
 }
+
