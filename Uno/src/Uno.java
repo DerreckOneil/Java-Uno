@@ -262,9 +262,10 @@ public class Uno {
             for (int i = 0; i < PlayerOneCards.size(); i++) {
                 System.out.println("===================================================================================");
                 System.out.println(""
-                        + "index: " +  i + "\t Name: " + PlayerOneCards.get(i).getType().name() + "\t ColorValue: "
+                        + "index: " +  i + "\tName: " + PlayerOneCards.get(i).getEnumeration() + 
+                        "\t Type: " + PlayerOneCards.get(i).getType().name() + "\t ColorValue: "
                         + PlayerOneCards.get(i).getColorValue() + "\t CardValue: "
-                        + PlayerOneCards.get(i).getCardValue());
+                        + PlayerOneCards.get(i).getCardValue()); 
                 //System.out.println("===================================================================================");
             }
         } else {
@@ -272,7 +273,8 @@ public class Uno {
             for (int i = 0; i < PlayerTwoCards.size(); i++) {
                 System.out.println("===================================================================================");
                 System.out.println(""
-                        + "index: " +  i + "\t Name: " + PlayerTwoCards.get(i).getType().name() + "\t ColorValue: "
+                        + "index: " +  i + "\tName: " + PlayerTwoCards.get(i).getEnumeration() + 
+                        "\t Type: " + PlayerTwoCards.get(i).getType().name() + "\t ColorValue: "
                         + PlayerTwoCards.get(i).getColorValue() + "\t CardValue: "
                         + PlayerTwoCards.get(i).getCardValue());
             }
@@ -281,7 +283,7 @@ public class Uno {
     }
 
     private static void CheckLastCardPlayed() {
-        System.out.println("Last card Name: " + CardsPlayed.peek().getType().name() + "\nColorValue: " + CardsPlayed.peek().getColorValue() + "\nCardValue: " + CardsPlayed.peek().getCardValue());
+        System.out.println("Last card Name: " + CardsPlayed.peek().getEnumeration() + CardsPlayed.peek().getType().name() + "\nColorValue: " + CardsPlayed.peek().getColorValue() + "\nCardValue: " + CardsPlayed.peek().getCardValue());
 
     }
 
