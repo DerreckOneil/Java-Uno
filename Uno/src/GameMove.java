@@ -53,9 +53,9 @@ public class GameMove
             System.out.println("Same Card");
             isValid = true;
         }
-        else if(SameNumber(playedCard, currentCard))
+        else if(SameNumber(playedCard, currentCard) && SameCardType(playedCard, currentCard))
         {
-            System.out.println("It has the same color or number");
+            System.out.println("It has the same color number");
             isValid = true;
         }
         else
@@ -104,7 +104,20 @@ public class GameMove
         
         return sameNumber;
     }
-    
+    private boolean SameCardType(Card playedCard, Card currentCard) 
+    {
+        boolean sameCardType = false;
+        if(playedCard.getType() == currentCard.getType())
+        {
+            sameCardType = true;
+        }
+        else 
+        {
+            sameCardType = false;
+        }
+        
+        return sameCardType;
+    }
     public void IsPlayingStackRule(boolean tf)
     {
         this.playingStackRule = tf;
@@ -113,4 +126,6 @@ public class GameMove
     {
         return playingStackRule;
     }
+
+    
 }
