@@ -1,4 +1,6 @@
     
+
+package unoProj;
 import java.util.*;
 import java.util.Random;
 
@@ -10,11 +12,13 @@ import java.util.Random;
  *
  * @author oneil
  */
+
 public class Uno {
     //todo: Make sure the AI is picking up a card if they didn't play any!
     /**
      * @param args the command line arguments
      */
+    
     private static Stack<Card> CardsPlayed = new Stack<Card>();
     private static List<Card> PlayerOneCards = new ArrayList<Card>();
     private static List<Card> PlayerTwoCards = new ArrayList<Card>();
@@ -23,8 +27,6 @@ public class Uno {
     private static boolean AIPlacedACard;
     private static boolean wildCardPlaced;
     private static boolean colorWildCardPlaced;
-    private static boolean uno;
-    private static boolean win;
 
     public static void main(String[] args) {
         // TODO code application logic here
