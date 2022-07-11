@@ -3,10 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Personal%20Projects/Java-Uno/Uno/src/GameMove.java</file>
-            <file>file:/C:/Personal%20Projects/Java-Uno/Uno/src/CardType.java</file>
-            <file>file:/C:/Personal%20Projects/Java-Uno/Uno/src/Uno.java</file>
-            <file>file:/C:/Personal%20Projects/Java-Uno/Uno/src/Card.java</file>
+            <file>file:/C:/Personal%20Projects/Java-Uno/Uno/src/unoProj/CardEnum.java</file>
+            <file>file:/C:/Personal%20Projects/Java-Uno/Uno/src/unoProj/Color.java</file>
+            <file>file:/C:/Personal%20Projects/Java-Uno/Uno/src/unoProj/Uno.java</file>
+            <file>file:/C:/Personal%20Projects/Java-Uno/Uno/src/unoProj/GameMove.java</file>
+            <file>file:/C:/Personal%20Projects/Java-Uno/Uno/src/unoProj/Card.java</file>
+            <file>file:/C:/Personal%20Projects/Java-Uno/Uno/src/unoProj/CardType.java</file>
         </group>
     </open-files>
 </project-private>
