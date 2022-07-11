@@ -64,7 +64,6 @@ public class Uno {
                     "\nCardValue: " + PlayerTwoCards.get(i).getCardValue());
         }
         FirstIterationPlay();
-
         MainGameLoop();
 
     }
@@ -94,6 +93,9 @@ public class Uno {
 
     }
 
+    /**
+     * 
+     */
     private static void MainGameLoop() {
         PrintPlayerCards(1);
         CheckLastCardPlayed();
@@ -132,10 +134,7 @@ public class Uno {
                 MainGameLoop();
                 break;
         }
-        System.out.println("Now it's Player 2's turn.");
-        wildCardPlaced = false;
-        PrintPlayerCards(2);
-        DetermineIfAICanPlayACard(); // Only plays first card available
+        InitateSecondPlayerPhase();
 
         if (!AIPlacedACard) {
             System.out.println("Giving the AI a card!-----------------");
@@ -157,6 +156,13 @@ public class Uno {
             System.exit(0);
         }
         MainGameLoop();
+    }
+
+    private static void InitateSecondPlayerPhase() {
+        System.out.println("Now it's Player 2's turn.");
+        wildCardPlaced = false;
+        PrintPlayerCards(2);
+        DetermineIfAICanPlayACard(); // Only plays first card available
     }
 
     private static void DetermineIfAICanPlayACard() {
@@ -194,6 +200,7 @@ public class Uno {
         if (isValidMove && !wildCardPlaced) {
             System.out.println(wildCardPlaced);
             if (player == 1) {
+
                 System.out.println("Would you like to play this card? 1:Y 2:N");
                 PrintCardStats(currentCard);
                 System.out.println("Onto this card?");
@@ -204,6 +211,7 @@ public class Uno {
                         PlayCard(currentCard, player);
                         break;
                     case 2:
+                        MainGameLoop();
                         return;
                 }
             } else {
@@ -225,7 +233,7 @@ public class Uno {
         boolean isValidMove = RulebookGameMove.IsValidStacked(playedCard, currentCard);
         if (isValidMove && !wildCardPlaced) {
             if (player == 1) {
-                System.out.println("Would you like to play this card? 1:Y 2:N");
+                System.out.println("Would you like to ALSO play this card? 1:Y 2:N");
                 PrintCardStats(currentCard);
                 System.out.println("Onto this card?");
                 PrintCardStats(playedCard);
@@ -314,13 +322,59 @@ public class Uno {
         } else {
             PlayerTwoCards.remove(card);
         }
-        if (card.getCardValue() >= 13) // count the drawTwo as wildcards
-        {
+        if (card.getCardValue() >= 13) {
             System.out.println("Wildcard has been placed!");
             wildCardPlaced = true;
+            String cardEnum = card.getType().name();
+            switch (cardEnum) {
+                case "DRAWFOUR":
+                    if (player == 1) {
+                        System.out.println("adding four cards to player 2's hand");
+                        for (int i = 0; i < 4; i++) {
+                            PlayerTwoCards.add(DrawCard());
+                        }
+                    } else {
+                        System.out.println("adding four cards to player 1's hand");
+                        for (int i = 0; i < 4; i++) {
+                            PlayerOneCards.add(DrawCard());
+                        }
+                    }
+                    break;
+
+                case "CHANGECOLOR":
+                    Scanner kbd = new Scanner(System.in);
+                    System.out.println("Enter in a new color you'd like to play: \t1:Red \t2:Blue \t3:Yellow \tGreen");
+                    int option = kbd.nextInt();
+                    switch (option) {
+                        case 1:
+                            CardsPlayed.push(new Card(1, -1, CardType.NORMAL, CardEnum.RED));
+                            break;
+
+                        case 2:
+                            CardsPlayed.push(new Card(2, -1, CardType.NORMAL, CardEnum.BLUE));
+                            break;
+
+                        case 3:
+                            CardsPlayed.push(new Card(3, -1, CardType.NORMAL, CardEnum.YELLOW));
+                            break;
+
+                        case 4:
+                            CardsPlayed.push(new Card(4, -1, CardType.NORMAL, CardEnum.GREEN));
+                            break;
+                    }
+
+                    break;
+
+                default:
+                    System.out.println("It's seems to be something else...");
+                    break;
+
+            }
         } else if (card.getCardValue() >= 5 && card.getCardValue() < 13) {
             System.out.println("Color wild card placed. ");
+
             colorWildCardPlaced = true;
+
         }
     }
 
