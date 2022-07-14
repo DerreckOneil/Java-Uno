@@ -378,9 +378,9 @@ public class Uno {
         if (card.getCardValue() >= 13) {
             System.out.println("Wildcard has been placed!");
             wildCardPlaced = true;
-            String cardEnum = card.getType().name();
+            CardEnum cardEnum = card.getEnumeration();
             switch (cardEnum) {
-                case "DRAWFOUR":
+                case DRAWFOUR:
                     if (player == 1) {
                         System.out.println("adding four cards to player 2's hand");
                         for (int i = 0; i < 4; i++) {
@@ -393,7 +393,7 @@ public class Uno {
                         }
                     }
                     break;
-                case "CHANGECOLOR":
+                case CHANGECOLOR:
                     Scanner kbd = new Scanner(System.in);
                     System.out.println(
                             "Enter in a new color you'd like to play: \t1:Red \t2:Blue \t3:Yellow \tGreen");
@@ -417,7 +417,7 @@ public class Uno {
 
                     break;
                 default:
-                    System.out.println("It's seems to be something else...");
+                    System.out.println("It's seems to be something else..." + card.getEnumeration());
                     break;
             }
         } else if (card.getCardValue() >= 5 && card.getCardValue() < 13) {
@@ -428,6 +428,7 @@ public class Uno {
                 case "REVERSE":
                     System.out.println("Reverse placed...on 1v1 this means I go again");
                     if (player == 1) {
+                        System.out.println("Reset!");
                         MainGameLoop();
                     } else {
                         InitateSecondPlayerPhase();
